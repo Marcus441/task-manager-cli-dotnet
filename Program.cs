@@ -1,13 +1,21 @@
 ﻿using System.Diagnostics;
 using TaskManagerCli.src.Services;
 
-var sw = Stopwatch.StartNew();
 var pman = await ProcessManager.CreateAsync();
+var runCount = 0;
 
-var procDict = pman.GetKeyValuePairs();
-foreach (var proc in procDict)
+while (true)
 {
-    Console.WriteLine($"{proc.Key}: {proc.Value}");
-}
-Console.WriteLine(sw.ElapsedMilliseconds);
+    await Task.Delay(100);
 
+    await pman.RefreshAsync();
+    var procDict = pman.GetKeyValuePairs();
+    runCount++;
+
+    foreach (var proc in procDict)
+    {
+        Console.WriteLine($"{proc.Key}: {proc.Value}");
+    }
+
+    Console.WriteLine(runCount);
+}
