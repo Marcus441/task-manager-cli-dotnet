@@ -10,38 +10,58 @@ public class ProcessManager
     public ProcessStat? GetProcess(int pid)
         => _byPid.GetValueOrDefault(pid);
     public Dictionary<int, ProcessStat> GetKeyValuePairs() => _byPid;
-    public ProcessManager()
+
+    public static async Task<ProcessManager> CreateAsync()
     {
-        PopulateProcessPidDict();
+        var pm = new ProcessManager();
+        await pm.PopulateProcessPidDictAsync();
+        return pm;
     }
-    public void Refresh()
+
+    public async Task RefreshAsync()
     {
         _byPid.Clear();
         _children.Clear();
-        PopulateProcessPidDict();
+        await PopulateProcessPidDictAsync();
     }
 
     private static string ProcStatDir(int pid) => $"/proc/{pid}/stat";
-    private static ProcessStat? ReadProc(int pid)
+    private static async Task<string?> ReadProcAsync(int pid)
     {
         try
         {
             using StreamReader procStatFile = new(ProcStatDir(pid));
-            return StatParser.Parse(procStatFile.ReadToEnd());
+            return await procStatFile.ReadToEndAsync();
         }
         catch (Exception e) when (e is FileNotFoundException or IOException)
         {
             return null;
         }
     }
-    private void PopulateProcessPidDict()
+    private async Task PopulateProcessPidDictAsync()
     {
-        foreach (var dir in Directory.EnumerateDirectories("/proc"))
+        var tasks = Directory.EnumerateDirectories("/proc")
+            .Select(dir =>
+            {
+                var isValid = int.TryParse(Path.GetFileName(dir), out int pid);
+                return (isValid, pid);
+            })
+            .Where(x => x.isValid)
+            .Select(x => ReadProcAsync(x.pid))
+            .Select(async statString =>
+            {
+                var result = await statString;
+                if (result is not null)
+                    return StatParser.Parse(result);
+                return null;
+            });
+
+        ProcessStat?[] results = await Task.WhenAll(tasks);
+
+        foreach (var proc in results)
         {
-            if (!int.TryParse(Path.GetFileName(dir), out int pid))
+            if (proc == null)
                 continue;
-            var proc = ReadProc(pid);
-            if (proc is null) continue;
             _byPid[proc.Pid] = proc;
 
             if (!_children.ContainsKey(proc.PPid))

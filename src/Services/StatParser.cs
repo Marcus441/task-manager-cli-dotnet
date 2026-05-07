@@ -24,7 +24,6 @@ public class StatParser
     public static ProcessStat Parse(string statLine)
     {
         var fields = BuildFields(statLine);
-        Console.WriteLine(string.Join(", ", fields));
         return new ProcessStat(
             Pid: int.Parse(fields[(int)StatField.Pid]),
             PPid: int.Parse(fields[(int)StatField.PPid]),
