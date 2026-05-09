@@ -18,10 +18,10 @@ public record CpuStat(
         try
         {
             using StreamReader reader = new("/proc/stat");
-            string text = reader.ReadToEnd();
-            int start = text.IndexOf("cpu");
-            int end = text.IndexOf('\n', start);
-            string cpuLine = text[start..end];
+            var text = reader.ReadToEnd();
+            var start = text.IndexOf("cpu");
+            var end = text.IndexOf('\n', start);
+            var cpuLine = text[start..end];
             int[] cpuLineInts = [.. cpuLine
                 .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .Skip(1)
@@ -53,10 +53,10 @@ public record CpuStat(
         try
         {
             using StreamReader reader = new("/proc/stat");
-            string text = reader.ReadToEnd();
-            int start = text.IndexOf($"cpu{cpuCore}");
-            int end = text.IndexOf('\n', start);
-            string cpuLine = text[start..end];
+            var text = reader.ReadToEnd();
+            var start = text.IndexOf($"cpu{cpuCore}");
+            var end = text.IndexOf('\n', start);
+            var cpuLine = text[start..end];
             int[] cpuLineInts = [.. cpuLine
                 .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .Skip(1)

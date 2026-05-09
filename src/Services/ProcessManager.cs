@@ -43,7 +43,7 @@ public class ProcessManager
         var tasks = Directory.EnumerateDirectories("/proc")
             .Select(dir =>
             {
-                var isValid = int.TryParse(Path.GetFileName(dir), out int pid);
+                var isValid = int.TryParse(Path.GetFileName(dir), out var pid);
                 return (isValid, pid);
             })
             .Where(x => x.isValid)
