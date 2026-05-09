@@ -1,4 +1,3 @@
-﻿using System.Diagnostics;
 using TaskManagerCli.src.Services;
 
 var pman = await ProcessManager.CreateAsync();
