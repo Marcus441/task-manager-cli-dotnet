@@ -47,26 +47,31 @@ public class ProcessManager
                 return (isValid, pid);
             })
             .Where(x => x.isValid)
-            .Select(x => ReadProcAsync(x.pid))
-            .Select(async statString =>
+            .Select(async x =>
             {
-                var result = await statString;
-                if (result is not null)
-                    return StatParser.Parse(result);
-                return null;
+                var result = await ReadProcAsync(x.pid);
+                return result is not null ? StatParser.Parse(result) : null;
             });
 
-        ProcessStat?[] results = await Task.WhenAll(tasks);
+        var results = await Task.WhenAll(tasks);
 
         foreach (var proc in results)
         {
             if (proc == null)
+            {
                 continue;
+            }
+
             _byPid[proc.Pid] = proc;
 
-            if (!_children.ContainsKey(proc.PPid))
-                _children[proc.PPid] = [];
-            _children[proc.PPid].Add(proc.Pid);
+            if (_children.TryGetValue(proc.PPid, out var childProcesses))
+            {
+                childProcesses.Add(proc.Pid);
+            }
+            else
+            {
+                _children[proc.PPid] = [proc.Pid];
+            }
         }
     }
 
