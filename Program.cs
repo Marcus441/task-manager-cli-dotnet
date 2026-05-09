@@ -1,7 +1,10 @@
+using TaskManagerCli.src.Models;
 using TaskManagerCli.src.Services;
 
 var pman = await ProcessManager.CreateAsync();
-var runCount = 0;
+// var runCount = 0;
+var terminal = new Terminal();
+var screen = new Screen(terminal);
 
 while (true)
 {
@@ -9,12 +12,20 @@ while (true)
 
     await pman.RefreshAsync();
     var procDict = pman.GetKeyValuePairs();
-    runCount++;
+    // runCount++;
 
+    var row = 0;
     foreach (var proc in procDict)
     {
-        Console.WriteLine($"{proc.Key}: {proc.Value}");
-    }
+        screen.DrawString(0, row, $"{proc.Key}: {proc.Value}".AsSpan());
+        row++;
 
-    Console.WriteLine(runCount);
+        if (row >= terminal.Rows)
+        {
+            break;
+        }
+    }
+    screen.Render();
+
+    // Console.WriteLine(runCount);
 }

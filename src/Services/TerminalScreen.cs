@@ -31,10 +31,27 @@ public class Screen
                 var col = i % _terminal.Cols;
                 var row = i / _terminal.Cols;
                 // point cursor to position
+                var cursorCommand = $"\x1b[{row};{col}H";
                 // print _backBuff[i].Glyph with bg and fg
+                Console.Write(cursorCommand + _backBuff[i].ToString());
 
                 // sync
                 _frontBuff[i] = _backBuff[i];
+            }
+        }
+    }
+
+    public void DrawString(int x, int y, ReadOnlySpan<char> text, byte fg = 7 /* white */, byte bg = 0 /* black */)
+    {
+        var startIndex = y * _terminal.Cols + x;
+
+        for (var i = 0; i < text.Length; i++)
+        {
+            var index = startIndex + i;
+
+            if (index >= 0 && index < _backBuff.Length)
+            {
+                _backBuff[index] = new Cell { Glyph = text[i], Foreground = fg, Background = bg };
             }
         }
     }
