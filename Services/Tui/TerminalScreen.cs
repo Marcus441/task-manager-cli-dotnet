@@ -7,6 +7,8 @@ using TaskManagerCli.Models;
 public class Screen : ICanvas
 {
     private readonly Terminal _terminal;
+    public int Height => _terminal.Rows;
+    public int Width => _terminal.Cols;
     private Cell[] _backBuff = null!;
     private Cell[] _frontBuff = null!;
 
