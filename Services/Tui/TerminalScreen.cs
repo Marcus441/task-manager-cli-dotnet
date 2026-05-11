@@ -1,9 +1,10 @@
 namespace TaskManagerCli.Services.Tui;
 
 using TaskManagerCli.Services.Tui.Core;
+using TaskManagerCli.Services.Tui.Interfaces;
 using TaskManagerCli.Models;
 
-public class Screen
+public class Screen : ICanvas
 {
     private readonly Terminal _terminal;
     private Cell[] _backBuff = null!;
@@ -22,6 +23,7 @@ public class Screen
         _backBuff = new Cell[_terminal.Size];
         _frontBuff = new Cell[_terminal.Size];
     }
+
     public void Render()
     {
         for (var i = 0; i < _terminal.Size; i++)
