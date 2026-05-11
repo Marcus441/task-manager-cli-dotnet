@@ -1,6 +1,6 @@
-using TaskManagerCli.src.Models;
+using TaskManagerCli.Models;
 
-namespace TaskManagerCli.src.Services;
+namespace TaskManagerCli.Services;
 
 public class StatParser
 {

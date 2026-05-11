@@ -1,4 +1,4 @@
-namespace TaskManagerCli.src.Models;
+namespace TaskManagerCli.Models;
 
 public struct Cell
 {

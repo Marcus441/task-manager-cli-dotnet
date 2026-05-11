@@ -1,6 +1,7 @@
-namespace TaskManagerCli.src.Services;
+namespace TaskManagerCli.Services.Tui;
 
-using TaskManagerCli.src.Models;
+using TaskManagerCli.Services.Tui.Core;
+using TaskManagerCli.Models;
 
 public class Screen
 {

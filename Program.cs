@@ -1,5 +1,5 @@
-using TaskManagerCli.src.Models;
-using TaskManagerCli.src.Services;
+using TaskManagerCli.Models;
+using TaskManagerCli.Services;
 
 var pman = await ProcessManager.CreateAsync();
 // var runCount = 0;

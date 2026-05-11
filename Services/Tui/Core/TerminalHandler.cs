@@ -1,4 +1,4 @@
-namespace TaskManagerCli.src.Models;
+namespace TaskManagerCli.Services.Tui.Core;
 
 public class Terminal
 {
