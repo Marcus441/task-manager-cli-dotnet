@@ -17,7 +17,7 @@ public class TaskListView(IReadOnlyDictionary<int, ProcessStat> processes) : ISc
         var row = 0;
         foreach (var proc in visible)
         {
-            canvas.DrawString(0, row++, proc.ToString());
+            canvas.DrawString(0, row++, proc.Value.ToString());
         }
     }
 }
