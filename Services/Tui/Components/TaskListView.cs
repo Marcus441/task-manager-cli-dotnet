@@ -13,11 +13,15 @@ public class TaskListView(IReadOnlyDictionary<int, ProcessStat> processes) : ISc
 
     public void Draw(ICanvas canvas)
     {
-        var visible = _processes.Skip(ScrollOffset);
+        var visible = _processes.Values
+            .OrderBy(p => p.Pid)
+            .Skip(ScrollOffset)
+            .Take(canvas.Height);
+
         var row = 0;
         foreach (var proc in visible)
         {
-            canvas.DrawString(0, row++, proc.Value.ToString());
+            canvas.DrawString(0, row++, proc.ToString());
         }
     }
 }
