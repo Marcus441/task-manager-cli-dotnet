@@ -43,7 +43,10 @@ public class Screen : ICanvas
             }
         }
     }
-
+    public void Clear()
+    {
+        Array.Fill(_backBuff, new Cell { Glyph = ' ', Foreground = 7, Background = 0 });
+    }
     public void DrawString(int x, int y, ReadOnlySpan<char> text, byte fg = 7 /* white */, byte bg = 0 /* black */)
     {
         var startIndex = y * _terminal.Cols + x;
