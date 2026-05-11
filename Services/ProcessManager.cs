@@ -9,7 +9,7 @@ public class ProcessManager
 
     public ProcessStat? GetProcess(int pid)
         => _byPid.GetValueOrDefault(pid);
-    public Dictionary<int, ProcessStat> GetKeyValuePairs() => _byPid;
+    public IReadOnlyDictionary<int, ProcessStat> Processes => _byPid;
 
     public static async Task<ProcessManager> CreateAsync()
     {
