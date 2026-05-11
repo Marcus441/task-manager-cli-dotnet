@@ -6,12 +6,32 @@ using TaskManagerCli.Services.Tui.Core;
 var pman = await ProcessManager.CreateAsync();
 var terminal = new Terminal();
 var canvas = new Screen(terminal);
-var taskList = new TaskListView(pman.Processes); // direct reference
+var taskList = new TaskListView(pman.Processes);
+var running = true;
 
-while (true)
+while (running)
 {
-    await Task.Delay(1000);
     await pman.RefreshAsync();
+    while (Console.KeyAvailable)
+    {
+        var key = Console.ReadKey(intercept: true);
+        switch (key.KeyChar)
+        {
+            case 'q':
+                running = false;
+                break;
+            case 'j':
+                taskList.ScrollDown();
+                break;
+            case 'k':
+                taskList.ScrollUp();
+                break;
+
+        }
+    }
+
+    canvas.Clear();
     taskList.Draw(canvas);
     canvas.Render();
+    await Task.Delay(16);
 }
