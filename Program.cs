@@ -6,7 +6,7 @@ using TaskManagerCli.Services.Tui.Core;
 var pman = await ProcessManager.CreateAsync();
 var terminal = new Terminal();
 var canvas = new Screen(terminal);
-var taskList = new TaskListView(pman.Processes);
+var taskList = new TaskListView(pman.Processes, canvas.Height);
 var running = true;
 
 while (running)
@@ -21,10 +21,10 @@ while (running)
                 running = false;
                 break;
             case 'j':
-                taskList.ScrollDown();
+                taskList.MoveDown();
                 break;
             case 'k':
-                taskList.ScrollUp();
+                taskList.MoveUp();
                 break;
 
         }
