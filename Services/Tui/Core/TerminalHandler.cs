@@ -8,6 +8,15 @@ public class Terminal
 
     public Terminal()
     {
+        Console.CursorVisible = false;
+        Console.Clear();
+        Console.CancelKeyPress += (_, e) =>
+        {
+            e.Cancel = true;
+            Console.CursorVisible = true;
+            Console.Clear();
+            Environment.Exit(0);
+        };
         UpdateDimensions();
     }
 
