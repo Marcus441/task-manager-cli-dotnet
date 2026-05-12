@@ -7,7 +7,7 @@ public struct Cell
     public byte Foreground { get; set; }
     public override readonly string ToString()
     {
-        return Glyph.ToString();
+        return $"\x1b[38;5;{Foreground}m\x1b[48;5;{Background}m{Glyph}\x1b[0m";
     }
 };
 
