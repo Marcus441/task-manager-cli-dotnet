@@ -10,6 +10,10 @@ public class TaskListView(IReadOnlyDictionary<int, ProcessStat> processes, int m
     private int _selectedAbsolute = 0;
 
     public int ScrollOffset { get; private set; }
+    public int? SelectedPid => _processes.Values
+        .OrderBy(p => p.Pid)
+        .ElementAtOrDefault(_selectedAbsolute)
+        ?.Pid;
 
     private int SelectedRelative => _selectedAbsolute - ScrollOffset;
     public void ScrollUp(int lines = 1)

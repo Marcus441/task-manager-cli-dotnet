@@ -10,7 +10,23 @@ public class ProcessManager
     public ProcessStat? GetProcess(int pid)
         => _byPid.GetValueOrDefault(pid);
     public IReadOnlyDictionary<int, ProcessStat> Processes => _byPid;
+    public bool KillProcess(int? pid)
+    {
 
+        if (pid is not int validPid || !_byPid.ContainsKey(validPid)) { return false; }
+
+        try
+        {
+            var process = System.Diagnostics.Process.GetProcessById(validPid);
+            process.Kill();
+            _byPid.Remove(validPid);
+            return true;
+        }
+        catch (Exception e) when (e is ArgumentException or InvalidOperationException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
     public static async Task<ProcessManager> CreateAsync()
     {
         var pm = new ProcessManager();

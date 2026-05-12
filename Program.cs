@@ -26,6 +26,9 @@ while (running)
             case 'k':
                 taskList.MoveUp();
                 break;
+            case 'x':
+                pman.KillProcess(taskList.SelectedPid);
+                break;
 
         }
     }
